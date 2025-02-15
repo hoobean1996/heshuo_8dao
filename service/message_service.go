@@ -46,8 +46,8 @@ type TextResponse struct {
 	Content      string   `xml:"Content"`      // 回复的消息内容
 }
 
-// HandleTextMessage 处理接收到的文本消息
-func HandleTextMessage(c *gin.Context) {
+// HandleInteraction 处理接收到的文本消息
+func HandleInteraction(c *gin.Context) {
 	// 读取请求体
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
@@ -66,24 +66,23 @@ func HandleTextMessage(c *gin.Context) {
 		return
 	}
 
-	// 验证消息类型
-	if message.MsgType != "text" {
-		c.XML(http.StatusBadRequest, gin.H{
-			"error": "Invalid message type",
-		})
-		return
+	fmt.Println("request", message)
+
+	content := "Hi!"
+
+	if message.MsgType == "text" {
+		content = "收到你的消息 (text): " + message.Content
+
+	} else if message.MsgType == "event" {
+		content = "收到你的消息 (event): " + message.Content
 	}
 
 	response := TextResponse{
-		ToUserName:   message.FromUserName,         // 原发送者作为接收者
-		FromUserName: message.ToUserName,           // 原接收者作为发送者
-		CreateTime:   time.Now().Unix(),            // 当前时间戳
-		MsgType:      "text",                       // 消息类型为文本
-		Content:      "收到你的消息: " + message.Content, // 回复的内容
+		ToUserName:   message.FromUserName, // 原发送者作为接收者
+		FromUserName: message.ToUserName,   // 原接收者作为发送者
+		CreateTime:   time.Now().Unix(),    // 当前时间戳
+		MsgType:      "text",               // 消息类型为文本
+		Content:      content,              // 回复的内容
 	}
-
-	fmt.Println("request", message)
-	fmt.Println("response", response)
-
 	c.XML(http.StatusOK, response)
 }

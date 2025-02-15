@@ -14,6 +14,6 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.POST("/api/message", service.HandleTextMessage)
+	r.POST("/api/message", service.HandleInteraction)
 	r.Run(":80")
 }
