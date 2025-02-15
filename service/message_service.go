@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
@@ -66,7 +67,9 @@ func HandleInteraction(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("request", message)
+	data, _ := json.Marshal(message)
+
+	fmt.Println("request", string(data))
 
 	content := "Hi!"
 
