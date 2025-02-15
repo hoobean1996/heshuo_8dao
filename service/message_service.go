@@ -49,6 +49,7 @@ type TextResponse struct {
 
 // HandleInteraction 处理接收到的文本消息
 func HandleInteraction(c *gin.Context) {
+
 	// 读取请求体
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
@@ -57,6 +58,7 @@ func HandleInteraction(c *gin.Context) {
 		})
 		return
 	}
+	fmt.Println("HandleInteraction", string(body))
 
 	// 解析XML消息
 	var message CommonMessage
